@@ -22,9 +22,12 @@ export default CustomButton;
 const styles = StyleSheet.create({
   button: {
     backgroundColor: COLORS.primary,
-    padding: 14,
-    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    borderRadius: 8,
     alignItems: 'center',
+    alignSelf: 'flex-end',
+
   },
 
   text: {

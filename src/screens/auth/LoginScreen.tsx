@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import {
   View,
@@ -12,34 +12,26 @@ import {
   Image,
 } from 'react-native';
 
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import Toast from 'react-native-toast-message';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {loginUser} from '../../redux/thunk/authThunk';
+import { loginUser } from '../../redux/thunk/authThunk';
 
 import CustomInput from '../../components/common/CustomInput';
 import CustomButton from '../../components/common/CustomButton';
 
 import COLORS from '../../contants/colors';
+import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
-
   const dispatch = useDispatch();
-
-  const [email, setEmail] = useState(
-    'testpracticaluser001@mailinator.com',
-  );
-
-  const [password, setPassword] =
-    useState('Test@123');
-
-  const [showPassword, setShowPassword] =
-    useState(false);
-
+const navigation = useNavigation<any>();
+  const [email, setEmail] = useState('testpracticaluser001@mailinator.com');
+  const [password, setPassword] = useState('Test@123');
+  const [showPassword, setShowPassword] = useState(false);
   const onLogin = async () => {
-
     const response = await dispatch(
       loginUser({
         email,
@@ -48,25 +40,17 @@ const LoginScreen = () => {
     );
 
     if (response?.payload?.success) {
-
       Toast.show({
         type: 'success',
         text1: 'Login Success',
         text2: response?.payload?.message,
       });
-
-      console.log(
-        'USER:',
-        response?.payload?.data?.user,
-      );
-
-      console.log(
-        'TOKEN:',
-        response?.payload?.data?.token,
-      );
-
+      console.log('USER:', response?.payload?.data?.user);
+      console.log('TOKEN:', response?.payload?.data?.token);
+      navigation.navigate('EventDetail', {
+        event: response?.payload?.data,
+      });
     } else {
-
       Toast.show({
         type: 'error',
         text1: 'Login Failed',
@@ -77,24 +61,17 @@ const LoginScreen = () => {
 
   return (
     <SafeAreaView style={styles.safe}>
-
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="#0000"
-      />
+      <StatusBar barStyle="dark-content" backgroundColor="#0000" />
 
       <ScrollView
         bounces={false}
         contentContainerStyle={styles.scroll}
-        keyboardShouldPersistTaps="handled">
-
+        keyboardShouldPersistTaps="handled"
+      >
         {/* TOP SECTION */}
 
         <View style={styles.hero}>
-
-          <Text style={styles.logo}>
-            Plie&#772;
-          </Text>
+          <Text style={styles.logo}>Plie&#772;</Text>
 
           {/* LOGO IMAGE */}
 
@@ -108,10 +85,7 @@ const LoginScreen = () => {
         {/* FORM */}
 
         <View style={styles.form}>
-
-          <Text style={styles.fieldLabel}>
-            Email
-          </Text>
+          <Text style={styles.fieldLabel}>Email</Text>
 
           <CustomInput
             placeholder="email@email.com"
@@ -121,9 +95,7 @@ const LoginScreen = () => {
 
           {/* PASSWORD */}
 
-          <Text style={styles.fieldLabel}>
-            Password
-          </Text>
+          <Text style={styles.fieldLabel}>Password</Text>
 
           <CustomInput
             placeholder="Password"
@@ -131,107 +103,55 @@ const LoginScreen = () => {
             onChangeText={setPassword}
             secureTextEntry={!showPassword}
           />
-          <TouchableOpacity
-            style={styles.forgotWrap}>
-
-            <Text style={styles.forgot}>
-              Forgot Password?
-            </Text>
-
+          <TouchableOpacity style={styles.forgotWrap}>
+            <Text style={styles.forgot}>Forgot Password?</Text>
           </TouchableOpacity>
 
           {/* SIGN IN */}
 
-          <CustomButton
-            title="Sign In"
-            onPress={onLogin}
-          />
+          <CustomButton title="Sign In" onPress={onLogin} />
 
           {/* SIGN UP */}
 
           <View style={styles.signUpRow}>
-
-            <Text style={styles.signUpText}>
-              Not a member?
-            </Text>
+            <Text style={styles.signUpText}>Not a member?</Text>
 
             <TouchableOpacity>
-
-              <Text style={styles.signUpLink}>
-                Sign Up Here
-              </Text>
-
+              <Text style={styles.signUpLink}>Sign Up Here</Text>
             </TouchableOpacity>
-
           </View>
 
           {/* DIVIDER */}
 
           <View style={styles.dividerRow}>
-
             <View style={styles.dividerLine} />
 
-            <Text style={styles.dividerText}>
-              or Sign In with:
-            </Text>
+            <Text style={styles.dividerText}>or Sign In with:</Text>
 
             <View style={styles.dividerLine} />
-
           </View>
 
           {/* SOCIAL */}
 
-         <View style={styles.socialRow}>
+          <View style={styles.socialRow}>
+            <TouchableOpacity style={styles.socialBtn}>
+              <FontAwesome name="google" size={24} color="#DB4437" />
+            </TouchableOpacity>
 
-  <TouchableOpacity
-    style={styles.socialBtn}>
+            <TouchableOpacity style={styles.socialBtn}>
+              <Ionicons name="logo-apple" size={26} color="#111" />
+            </TouchableOpacity>
 
-    <FontAwesome
-      name="google"
-      size={24}
-      color="#DB4437"
-    />
-
-  </TouchableOpacity>
-
-  <TouchableOpacity
-    style={styles.socialBtn}>
-
-    <Ionicons
-      name="logo-apple"
-      size={26}
-      color="#111"
-    />
-
-  </TouchableOpacity>
-
-  <TouchableOpacity
-    style={[
-      styles.socialBtn,
-      styles.socialFB,
-    ]}>
-
-    <FontAwesome
-      name="facebook"
-      size={22}
-      color="#FFF"
-    />
-
-  </TouchableOpacity>
-
-</View>
+            <TouchableOpacity style={[styles.socialBtn, styles.socialFB]}>
+              <FontAwesome name="facebook" size={22} color="#FFF" />
+            </TouchableOpacity>
+          </View>
 
           {/* GUEST */}
 
-          <TouchableOpacity
-            style={styles.guestWrap}>
-
-            <Text style={styles.guestText}>
-              Enter as Guest
-            </Text>
-
+          <TouchableOpacity style={styles.guestWrap}>
+            <Text style={styles.guestText}>Enter as Guest</Text>
           </TouchableOpacity>
-
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -241,7 +161,6 @@ const LoginScreen = () => {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-
   safe: {
     flex: 1,
     backgroundColor: '#E0E0E0',
@@ -263,15 +182,12 @@ const styles = StyleSheet.create({
     fontSize: 56,
     fontWeight: '400',
     color: '#111',
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Roboto'
-        : 'Roboto',
+    fontFamily: Platform.OS === 'ios' ? 'Roboto' : 'Roboto',
   },
 
   logoImage: {
-    width: 70,
-    height: 70,
+    width: 50,
+    height: 50,
   },
 
   form: {
@@ -286,6 +202,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#111',
     marginBottom: 5,
+    marginHorizontal: 20,
   },
 
   forgotWrap: {
@@ -347,11 +264,9 @@ const styles = StyleSheet.create({
     width: 58,
     height: 56,
     borderRadius: 5,
-  
+
     borderColor: '#E5E5E5',
     backgroundColor: '#FFF',
-  
-
     justifyContent: 'center',
     alignItems: 'center',
 

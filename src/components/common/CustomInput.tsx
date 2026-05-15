@@ -27,7 +27,7 @@ export default CustomInput;
 const styles = StyleSheet.create({
   input: {
     borderRadius: 10,
-    padding: 14,
+    padding: 10,
     marginVertical: 8,
     backgroundColor: COLORS.white,
     shadowColor: COLORS.black,
@@ -38,5 +38,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 2,
+      marginHorizontal: 20, 
   },
 });
