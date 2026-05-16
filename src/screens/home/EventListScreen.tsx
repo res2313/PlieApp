@@ -1,17 +1,15 @@
-import React, {useState} from 'react';
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  SafeAreaView,
-} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, FlatList, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
 import EventCard, { EventCardProps } from '../../components/EventCard';
 import COLORS from '../../contants/colors';
 import Header from '../../components/Header';
-
-
-// ── Mock data ──────────────────────────────────────────────────────────────
-const EVENTS: Omit<EventCardProps, 'onPress' | 'onShare' | 'onFavourite'>[] = [
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleFavourite } from '../../redux/slices/favoriteSlice';
+import { getEvents } from '../../redux/thunk/eventThunk';
+export const EVENTS: Omit<
+  EventCardProps,
+  'onPress' | 'onShare' | 'onFavourite'
+>[] = [
   {
     id: '1',
     title: 'ADICTO: Berlin Festival',
@@ -19,7 +17,7 @@ const EVENTS: Omit<EventCardProps, 'onPress' | 'onShare' | 'onFavourite'>[] = [
     price: '€30 – €100',
     location: 'Berlin, Germany',
     tags: ['Workshop', 'Bachata'],
-    image: {uri: 'https://picsum.photos/seed/adicto/200/300'},
+    image: { uri: 'https://picsum.photos/seed/adicto/200/300' },
     isFavourite: true,
   },
   {
@@ -29,7 +27,7 @@ const EVENTS: Omit<EventCardProps, 'onPress' | 'onShare' | 'onFavourite'>[] = [
     price: '€12',
     location: 'Berlin, Germany',
     tags: ['Course', 'Bachata'],
-    image: {uri: 'https://picsum.photos/seed/bachata/200/300'},
+    image: { uri: 'https://picsum.photos/seed/bachata/200/300' },
     isFavourite: false,
   },
   {
@@ -39,7 +37,7 @@ const EVENTS: Omit<EventCardProps, 'onPress' | 'onShare' | 'onFavourite'>[] = [
     price: '€65 – €450',
     location: 'Rovinj, Croatia',
     tags: ['Festival', 'Bachata'],
-    image: {uri: 'https://picsum.photos/seed/rovinj/200/300'},
+    image: { uri: 'https://picsum.photos/seed/rovinj/200/300' },
     isFavourite: false,
   },
   {
@@ -49,7 +47,7 @@ const EVENTS: Omit<EventCardProps, 'onPress' | 'onShare' | 'onFavourite'>[] = [
     price: '€30 – €100',
     location: 'Berlin, Germany',
     tags: ['Party', 'Bachata', 'Salsa', 'Kizz'],
-    image: {uri: 'https://picsum.photos/seed/bebo/200/300'},
+    image: { uri: 'https://picsum.photos/seed/bebo/200/300' },
     isFavourite: true,
   },
   {
@@ -59,7 +57,7 @@ const EVENTS: Omit<EventCardProps, 'onPress' | 'onShare' | 'onFavourite'>[] = [
     price: '€7',
     location: 'Berlin, Germany',
     tags: ['Course', 'Party', 'Bachata', 'Salsa'],
-    image: {uri: 'https://picsum.photos/seed/saturday/200/300'},
+    image: { uri: 'https://picsum.photos/seed/saturday/200/300' },
     isFavourite: false,
   },
   {
@@ -69,35 +67,51 @@ const EVENTS: Omit<EventCardProps, 'onPress' | 'onShare' | 'onFavourite'>[] = [
     price: '€8',
     location: 'Berlin, Germany',
     tags: ['Party', 'Bachata', 'Salsa', 'Kiz'],
-    image: {uri: 'https://picsum.photos/seed/soda/200/300'},
+    image: { uri: 'https://picsum.photos/seed/soda/200/300' },
     isFavourite: false,
   },
 ];
+const EventListScreen = ({ navigation }: any) => {
+  const dispatch = useDispatch<any>();
+  const favourites = useSelector((state: any) => state.favorites.favourites);
+  const { events, loading } = useSelector((state: any) => state.events);
+  useEffect(() => {
+  dispatch(getEvents());
+}, [dispatch]);
 
-// ── Screen ─────────────────────────────────────────────────────────────────
-const EventListScreen = ({navigation}: any) => {
-  const [events, setEvents] = useState(EVENTS);
-
-  const toggleFavourite = (id: string) => {
-    setEvents(prev =>
-      prev.map(e => (e.id === id ? {...e, isFavourite: !e.isFavourite} : e)),
+  if (loading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
     );
-  };
+  }
 
   return (
     <SafeAreaView style={styles.safe}>
-      <Header
-        title="Hello Renzo!"
-        subtitle="Are you ready to dance?"
-      />
+      <Header title="Hello Renzo!" subtitle="Are you ready to dance?" />
+
       <FlatList
         data={events}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => (
+        keyExtractor={(item, index) => item?.id?.toString() || index.toString()}
+        renderItem={({ item }) => (
           <EventCard
-            {...item}
-            onPress={() => navigation.navigate('EventDetail', {event: item})}
-            onFavourite={() => toggleFavourite(item.id)}
+            id={item?.id?.toString()}
+            title={item?.title || 'No Title'}
+            date={item?.date || 'No Date'}
+            price={item?.price || 'Free'}
+            location={item?.location || 'Unknown Location'}
+            tags={item?.tags || ['Dance']}
+            image={{
+              uri: item?.image || 'https://picsum.photos/200/300',
+            }}
+            isFavourite={favourites.includes(item?.id?.toString())}
+            onPress={() =>
+              navigation.navigate('EventDetail', {
+                event: item,
+              })
+            }
+            onFavourite={() => dispatch(toggleFavourite(item?.id?.toString()))}
             onShare={() => console.log('share', item.id)}
           />
         )}
@@ -116,11 +130,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.gray,
   },
+
   list: {
     paddingTop: 12,
     paddingBottom: 24,
   },
+
   separator: {
     height: 8,
+  },
+
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

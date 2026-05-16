@@ -1,30 +1,32 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {getEvents} from '../thunk/eventThunk';
 
-const eventsSlice = createSlice({
+const initialState = {
+  events: [],
+  loading: false,
+  error: null,
+};
+
+const eventSlice = createSlice({
   name: 'events',
-
-  initialState: {
-    events: [],
-    loading: false,
-  },
-
+  initialState,
   reducers: {},
-
   extraReducers: builder => {
-    builder.addCase(getEvents.pending, state => {
-      state.loading = true;
-    });
+    builder
+      .addCase(getEvents.pending, state => {
+        state.loading = true;
+      })
 
-    builder.addCase(getEvents.fulfilled, (state, action) => {
-      state.loading = false;
-      state.events = action.payload?.data || [];
-    });
+      .addCase(getEvents.fulfilled, (state, action) => {
+        state.loading = false;
+        state.events = action.payload;
+      })
 
-    builder.addCase(getEvents.rejected, state => {
-      state.loading = false;
-    });
+      .addCase(getEvents.rejected, (state, action: any) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-export default eventsSlice.reducer;
+export default eventSlice.reducer;

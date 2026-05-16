@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import SPACING from '../contants/spacing';
 import COLORS from '../contants/colors';
-
-
+import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 export interface EventCardProps {
   id: string;
   title: string;
@@ -38,32 +38,26 @@ const EventCard: React.FC<EventCardProps> = ({
   onFavourite,
 }) => {
   return (
-    <TouchableOpacity style={styles.card} activeOpacity={0.85} onPress={onPress}>
-      {/* Thumbnail */}
-      <Image source={image} style={styles.thumbnail} resizeMode="cover" />
-
-      {/* Body */}
+    <TouchableOpacity
+      style={styles.card}
+      activeOpacity={0.85}
+      onPress={onPress}
+    >
+      <View style={styles.imageContainer}>
+        <Image source={image} style={styles.thumbnail} resizeMode="cover" />
+      </View>
       <View style={styles.body}>
-        {/* Arrow */}
         <TouchableOpacity style={styles.arrowBtn} onPress={onPress}>
-          <Text style={styles.arrow}>→</Text>
+          <Feather name="arrow-right" style={styles.arrow} />
         </TouchableOpacity>
-
-        {/* Title */}
         <Text style={styles.title} numberOfLines={1}>
           {title}
         </Text>
-
-        {/* Date + location row */}
         <View style={styles.metaRow}>
           <Text style={styles.date}>{date}</Text>
           <Text style={styles.location}>{location}</Text>
         </View>
-
-        {/* Price */}
         <Text style={styles.price}>{price}</Text>
-
-        {/* Tags + actions */}
         <View style={styles.footerRow}>
           <View style={styles.tagsWrap}>
             {tags.map(tag => (
@@ -75,12 +69,21 @@ const EventCard: React.FC<EventCardProps> = ({
 
           <View style={styles.actions}>
             <TouchableOpacity onPress={onShare} style={styles.iconBtn}>
-              {/* Share icon */}
-              <Text style={styles.iconText}>⬆</Text>
+              <Feather name="share" size={18} color={COLORS.textGray} />
             </TouchableOpacity>
             <TouchableOpacity onPress={onFavourite} style={styles.iconBtn}>
-              <Text style={[styles.iconText, isFavourite && styles.heartActive]}>
-                {isFavourite ? '♥' : '♡'}
+              <Text
+                style={[styles.iconText, isFavourite && styles.heartActive]}
+              >
+                {isFavourite ? (
+                  <Ionicons name="heart" size={18} color={COLORS.heart} />
+                ) : (
+                  <Ionicons
+                    name="heart-outline"
+                    size={18}
+                    color={COLORS.textGray}
+                  />
+                )}
               </Text>
             </TouchableOpacity>
           </View>
@@ -103,21 +106,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
   },
-
-  /* Thumbnail */
+imageContainer: {
+  paddingLeft: SPACING.sm,
+  justifyContent: 'center',
+  paddingVertical: SPACING.sm,
+},
   thumbnail: {
-    width: 90,
-    height: 120,
+    width: 100,
+    height: 100,
+    padding: SPACING.md,
+    borderRadius: 12,
+    paddingVertical: SPACING.lg,
   },
 
-  /* Body */
   body: {
     flex: 1,
     padding: SPACING.md,
     justifyContent: 'space-between',
   },
-
-  /* Arrow top-right */
   arrowBtn: {
     position: 'absolute',
     top: SPACING.sm,
@@ -132,7 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: COLORS.black,
-    marginRight: 24, // avoid overlap with arrow
+    marginRight: 24,
     marginBottom: 4,
   },
 
@@ -161,7 +167,6 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
 
-  /* Footer */
   footerRow: {
     flexDirection: 'row',
     alignItems: 'center',

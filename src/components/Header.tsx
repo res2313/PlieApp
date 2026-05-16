@@ -54,8 +54,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight ?? 0,
     paddingHorizontal: SPACING.lg,
-    paddingBottom: SPACING.md,
+    paddingBottom: SPACING.xl,
     borderBottomWidth: 0,
+    
   },
   row: {
     flexDirection: 'row',
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '800',
+    fontWeight: '400',
     color: COLORS.black,
     letterSpacing: -0.5,
   },
