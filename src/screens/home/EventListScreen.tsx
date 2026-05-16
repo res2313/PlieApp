@@ -3,10 +3,8 @@ import {
   View,
   FlatList,
   StyleSheet,
-  SafeAreaView,
-  ActivityIndicator,
-  Text,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import EventCard, { EventCardProps } from '../../components/EventCard';
 import COLORS from '../../contants/colors';
 import Header from '../../components/Header';
@@ -97,7 +95,7 @@ const EventListScreen = ({ navigation }: any) => {
   // }
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={['bottom']}>
       <Header title="Hello Renzo!" subtitle="Are you ready to dance?" />
       <FlatList
         data={events}
@@ -111,7 +109,7 @@ const EventListScreen = ({ navigation }: any) => {
             location={item?.location}
             tags={item?.tags}
             image={{
-              uri: item?.image,
+              uri: item?.image || 'https://picsum.photos/seed/adicto/200/300',
             }}
             isFavourite={favourites.includes(item?.id)}
             onPress={() =>

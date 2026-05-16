@@ -5,9 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import COLORS from '../../contants/colors';
 
 interface Props {

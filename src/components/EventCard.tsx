@@ -106,11 +106,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
   },
-imageContainer: {
-  paddingLeft: SPACING.sm,
-  justifyContent: 'center',
-  paddingVertical: SPACING.sm,
-},
+  imageContainer: {
+    paddingLeft: SPACING.sm,
+    justifyContent: 'center',
+    paddingVertical: SPACING.sm,
+  },
   thumbnail: {
     width: 100,
     height: 100,

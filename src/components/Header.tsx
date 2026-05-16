@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import COLORS from '../contants/colors';
 import SPACING from '../contants/spacing';
-
-
 interface HeaderProps {
   title?: string;
   subtitle?: string;
@@ -18,7 +16,6 @@ interface HeaderProps {
   onBack?: () => void;
   rightElement?: React.ReactNode;
 }
-
 const Header: React.FC<HeaderProps> = ({
   title,
   subtitle,

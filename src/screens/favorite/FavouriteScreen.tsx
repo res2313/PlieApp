@@ -3,9 +3,9 @@ import {
   View,
   FlatList,
   StyleSheet,
-  SafeAreaView,
   Text,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import Header from '../../components/Header';
 import EventCard from '../../components/EventCard';
@@ -25,7 +25,7 @@ const FavouriteScreen = ({navigation}: any) => {
   );
 
   return (
-    <SafeAreaView style={styles.safe}>
+     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <Header
         title="Favourites"
         subtitle="Your liked events"
@@ -49,7 +49,7 @@ const FavouriteScreen = ({navigation}: any) => {
               price={item.price}
               location={item.location}
               tags={item.tags}
-              image={{uri: item.image}}
+              image={{uri: item.image||'https://picsum.photos/seed/adicto/200/300'}}
               isFavourite={true}
               onPress={() =>
                 navigation.navigate('EventDetail', {
