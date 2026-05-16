@@ -1,5 +1,5 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {getEvents} from '../thunk/eventThunk';
+import { createSlice } from '@reduxjs/toolkit';
+import { getEvents } from '../thunk/eventThunk';
 
 const initialState = {
   events: [],
@@ -22,9 +22,9 @@ const eventSlice = createSlice({
         state.events = action.payload;
       })
 
-      .addCase(getEvents.rejected, (state, action: any) => {
+      .addCase(getEvents.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        console.log('ERROR', action.payload);
       });
   },
 });

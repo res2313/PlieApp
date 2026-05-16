@@ -7,9 +7,7 @@ export const getEvents = createAsyncThunk(
     try {
       // GET TOKEN FROM REDUX
       const state: any = thunkAPI.getState();
-
       const token = state.auth.token;
-
       const response = await api.post(
         'events-listing',
         {},

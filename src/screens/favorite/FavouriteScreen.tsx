@@ -6,30 +6,20 @@ import {
   SafeAreaView,
   Text,
 } from 'react-native';
-
 import {useDispatch, useSelector} from 'react-redux';
-
 import Header from '../../components/Header';
 import EventCard from '../../components/EventCard';
-
 import COLORS from '../../contants/colors';
-
 import {toggleFavourite} from '../../redux/slices/favoriteSlice';
 
 const FavouriteScreen = ({navigation}: any) => {
   const dispatch = useDispatch();
-
-  // FAVORITE IDS
   const favourites = useSelector(
     (state: any) => state.favorites.favourites,
   );
-
-  // ALL EVENTS FROM API
   const events = useSelector(
     (state: any) => state.events.events,
   );
-
-  // FILTER FAVORITES
   const favouriteEvents = events.filter((item: any) =>
     favourites.includes(item.id),
   );
